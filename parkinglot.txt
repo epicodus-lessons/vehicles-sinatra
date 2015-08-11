@@ -1,0 +1,35 @@
+vehicle.rb
+
+define_singleton_method(:find) do |identification|
+  found_vehicle = nil
+  @@vehicles.each() do |vehicle|
+    if vehicle.id().eql?(identification.to_i())
+      found_vehicle = vehicle
+    end
+  end
+  found_vehicle
+end
+
+vehicle_spec.rb
+describe(".find") do
+  it("returns a vehicle by its id number") do
+    test_vehicle = Vehicle.new("Toyota", "Prius", 2000)
+    test_vehicle.save()
+    test_vehicle2 = Vehicle.new("Toyota", "Corolla", 1999)
+    test_vehicle2.save()
+    expect(Vehicle.find(test_vehicle.id())).to(eq(test_vehicle))
+  end
+end
+
+app.rb
+get('/vehicles/:id') do
+  @vehicle = Vehicle.find(params.fetch('id'))
+  erb(:vehicle)
+end
+
+vehicle.erb
+<h1><%= @vehicle.make() %></h1>
+<h1><%= @vehicle.model() %></h1>
+<h1><%= @vehicle.year() %></h1>
+
+<a href="/">Return to Main Page</a>
